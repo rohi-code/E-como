@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     addressType:{type:String}
 }
     ],
-    role:{type:String,default:user},
+    role:{type:String,default:'user'},
 avatar:{
     id:{type:String},
     url:{type:String}
@@ -26,6 +26,8 @@ avatar:{
 cretedAt:{type:Date,default:Date.now()}
 
 })
+
+
 
 userSchema.pre('save',async function(next){
 if(!this.isModified("password")){
@@ -43,4 +45,4 @@ userSchema.methods.comparePassword=async function(enterPassword){
 }
 
 
-module.exports=mongoose.Model('User',userSchema)
+module.exports=mongoose.model('User',userSchema)

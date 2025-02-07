@@ -1,6 +1,6 @@
 const app =require('./app')
 const connectDb=require('./db/db')
-connectDb()
+
 /*process: In Node.js, process is a global object that provides information about the current process running the application (like its environment, runtime, and status).
 uncaughtException: This is an event in Node.js that is triggered when an uncaught error occurs—meaning an error that wasn't caught by any try/catch block or error handler.*/
 /*
@@ -222,7 +222,7 @@ if(process.env.NODE_ENV!=='PRODUCTION'){
     require('dotenv').config({path:'backend/config/.env'})
 }
 
-
+connectDb()
 const server =app.listen(process.env.PORT,()=>{
     console.log(`Server is running on http://localhost:${process.env.PORT}`)
 })
