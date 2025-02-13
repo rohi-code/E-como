@@ -15,7 +15,8 @@ function Signup() {
   const [visible,setVisible]=useState(false)
   const[avatar,setAvatar]=useState('')
   const[msg,setMsg]=useState('')
-  
+  const[error,setError]=useState(false)
+
    const handleInput=(e)=>{
     const file = e.target.files[0]
     setAvatar(file)
@@ -41,12 +42,14 @@ axios.post(`${server}/create-user`,newForm,config).then((res)=>{
   setMsg(res.data.message)  
 }).catch((err)=>{
   console.log(err)
-  setMsg('failed')
+  setMsg(res.data.message)
+  setError(true)
 })
   }
   return (
     <div className='flex flex-col box-border h-screen justify-center items-center bg-gray-100'>
-      {msg && (<h1 className='text-green-600'>{msg}</h1>)}
+      {msg && error &&(<h1 className='text-red-600 font-bold text-2xl'>{msg}</h1>)}
+      {msg&& (<h1 className='text-green-600 font-bold text-2xl'>{msg}</h1>)}
       <div className='flex flex-col w-109 h-109   rounded-xl shadow-xl shawdow-black-600 bg-sky-100'>
         <div>
         <h1 className='text-center mt-5 text-2xl font-bold'>Create Account</h1>
