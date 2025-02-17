@@ -1,14 +1,26 @@
 import React, { useState } from 'react'
 import { IoEye } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoMdMail } from "react-icons/io";
+import server from '../../server';
+import axios from 'axios'
+import { toast } from 'react-toastify';
+
 const Login = () => {
+  const navigate = useNavigate()
 const [email,setEmail]=useState('')
 const [password,setPassword] = useState('')
 const [visible,setVisible]=useState(false)
-const handleSubmit=(e)=>{
-e.preventDeafult()
+const handleSubmit=async(e)=>{
+e.preventDefault()
+await axios.post(`${server}/login-user`,{email,password,},{withCredentials: true}).
+then(res=>{toast.success("login success!")
+  navigate("/")
+})
+.catch(err=>{console.log(err)
+  const errorMessage = err.response?.data?.message || 'Login failed!';
+  toast.error(errorMessage)})
 }
 
   return (

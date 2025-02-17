@@ -7,7 +7,7 @@ const ErrorHandler = require('../utils/ErrorHandler.js');
 const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/mail');
 const sendToken = require('../utils/jwtToken'); 
-
+const {isAuthenticated}=require('../middleware/auth.js')
 
 
 
@@ -25,6 +25,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
                 fs.unlinkSync(filePath);
             }
         }
+       
         return next(new ErrorHandler("User already exists", 400));
     }
     if (!req.file) {
@@ -41,7 +42,10 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
         name: name,
         email: email,
         password:password,
-        avatar: fileUrl
+        avatar: {
+             id: fileName,  // You can store filename as ID (or use cloud storage)
+        url: `/uploads/${fileName}`
+        }
     };
     console.log(user)
 const activationToken = createActivationToken(user)
@@ -76,11 +80,15 @@ const createActivationToken = (user) => {
 router.post("/activate", async (req, res, next) => {
 try{
     const {activationToken}=req.body
+    console.log(activationToken)
 const newUser=jwt.verify(activationToken,process.env.ACTIVATION_SECRET)
 if(!newUser){
     return next(new ErrorHandler("Invalid token or token expired",400))
 }
 const {name,email,password,avatar}=newUser
+let users = await User.findOne({email})
+if(users)
+    return next(new ErrorHandler("User already exist",400))
 const user=await User.create({
     name,
     email,
@@ -98,7 +106,43 @@ catch(error){
 })
 
 
+router.post('/login-user' , async(req,res,next)=>{
+    try{
+        const {email, password}= req.body
+        if(!email|| !password)
+            return next(new ErrorHandler("all the fields are required",400))
+   const user = await User.findOne({email}).select("password")
+if(!user)
+return next(new ErrorHandler("user dosent exist",400))
+const isPasswordValid = await user.comparePassword(password)
+if(!isPasswordValid)
+    return next(new ErrorHandler("please provide correct information",400))
+sendToken(user,201,res)
+    }
 
+    
+    catch(e){
+    return next(new ErrorHandler(e.message,500))}
+})
+
+
+
+
+router.get('/getuser',isAuthenticated, async(req,res,next)=>{
+    try{
+     const user = await User.findById(req.user.id)
+     if(!user){
+        return next(new ErrorHandler("User dosent exist",400))
+     }
+      res.status(200).json({
+        success:true,
+        user,
+      }) 
+    }
+    catch(error){
+        return next(new ErrorHandler(error.message,500))
+    }
+})
 
 
 
