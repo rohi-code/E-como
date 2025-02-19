@@ -1,27 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-function Product({name,description, image,price}) {
+function Product({ name, image, description, price }) {
   return (
-    <div  className='mt-5 ml-2 shadow-2xl shadow-gray-400'>
-      <div className='flex flex-col'>
-        <img src={image} alt={name}/>
-        
-    <div className='flex justify-between'>
-
-            <h1>
-              {name}
-            </h1>
-            <h1>${price}</h1>
-    </div>
-        
+    <div className="border rounded-lg shadow-lg p-4 bg-white">
+      <img className="w-full h-48 object-cover rounded-lg" src={image} alt={name} />
+      <div className="mt-4">
+        <h2 className="text-lg font-semibold">{name}</h2>
+        <p className="text-gray-600">{description}</p>
+        <p className="text-blue-500 font-bold mt-2">${price}</p>
       </div>
-          <div>
-            <p>
-              {description}
-            </p>
-          </div>
     </div>
-  )
+  );
 }
 
-export default Product
+export default Product;
