@@ -21,10 +21,10 @@ if(process.env.NODE_ENV!=="PRODUCTION"){
 
 //routes
 const user = require('./controller/user')
+const product= require('./controller/product')
 
-
-app.use('/api',user)
-
+ app.use('/api/user',user)
+app.use('/api/product',product)
 
 app.use(ErrorHandler)
 module.exports=app

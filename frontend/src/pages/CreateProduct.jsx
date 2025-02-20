@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-
+import server from '../server'
+import axios from 'axios'
 function CreateProduct() {
 
 const [images,setImages]=useState([])
@@ -36,11 +37,47 @@ const  handleImage=(e)=>{
 
 }
 
+const handleSubmit =async(e)=>{
+  e.preventDefault()
+const formData= new FormData()
+ formData.append('name',name)
+ formData.append('description',description)
+ formData.append('category',category)
+ formData.append('tags',tags)
+ formData.append('price',price)
+ formData.append('stock',stock)
+ formData.append('email',email)
+images.forEach(images=>{
+  formData.append("images",images)
+})
+try{
+const response = await axios.post(`${server}/product/createProduct`,formData,{headers: { 'Content-Type': 'multipart/form-data' },withCredentials:true})
+
+if (response.status === 201) {
+  alert("Product created successfully!");
+  setImages([]);
+  setName("");
+  setDescription("");
+  setCategory("");
+  setTags("");
+  setPrice("");
+  setStock("");
+  setEmail("");
+}
+
+}
+catch (err) {
+  console.error("Error creating product:", err);
+  alert("Failed to create product. Please check the data and try again.");
+}
+
+}
+
 
   return (
     <div>
       <h5>Create Product</h5>
-      <form>
+      <form onSubmit = {handleSubmit}>
         <div>
           <label>
             Email <span className='text-red-500'>*</span>
@@ -70,7 +107,7 @@ const  handleImage=(e)=>{
            </div>
             <div>
              <label>Price<span className='text-red-500'>*</span></label>
-              <input type='number' value={price} onChange={(e)=>setPrice(e.target.price)} required/>
+              <input type='number' value={price} onChange={(e)=>setPrice(e.target.value)} required/>
             </div>
             <div>
               <label>Stock <span className='text-red-500'>*</span></label>
