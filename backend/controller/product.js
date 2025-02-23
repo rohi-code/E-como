@@ -86,3 +86,4 @@ router.get('/get-products', async (req, res) => {
             res.status(500).json({ error: 'Server error. Could not fetch products.' });
         }
     })
+    /*** */
