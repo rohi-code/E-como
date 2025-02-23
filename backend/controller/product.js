@@ -3,6 +3,8 @@ const mongoose = require ('mongoose')
 const Product = require('../model/product')
 const {pupload} = require('../multer')
 const router = express.Router()
+const path = require('path');
+
 const validateProductData=(data)=>{
     const errors = [];
 
@@ -19,7 +21,8 @@ const validateProductData=(data)=>{
 
 router.post('/createProduct',pupload.array('images',10),async(req,res)=>{
     const {name,description,category,tags,price,stock, email} = req.body
-    const images = req.files.map((file)=>file.path)
+    const images = req.files.map((file) => `products/${path.basename(file.path)}`);
+
     const validationErrors = validateProductData({ name, description, category, price, stock, email });
     if (validationErrors.length > 0) {
         return res.status(400).json({ errors: validationErrors });
@@ -30,10 +33,10 @@ router.post('/createProduct',pupload.array('images',10),async(req,res)=>{
     }
 
     try {
-         const user = await User.findOne({ email });
-         if (!user) {
-             return res.status(400).json({ error: 'Email does not exist in the users database' });
-         }
+        //  const user = await User.findOne({ email });
+        //  if (!user) {
+        //      return res.status(400).json({ error: 'Email does not exist in the users database' });
+        //  }
 
         const newProduct = new Product({
             name,
@@ -58,6 +61,28 @@ router.post('/createProduct',pupload.array('images',10),async(req,res)=>{
     }
 });
 
+
+
 module.exports = router;
 
 
+router.get('/get-products', async (req, res) => {
+    try {
+        const products = await Product.find();
+        const productsWithFullImageUrl = products.map(product => {
+            if (product.images && product.images.length > 0) {
+                product.images = product.images.map(imagePath => {
+                    // Image URLs are already prefixed with /products
+                    return imagePath
+
+                });
+            }
+            return product;
+        })
+        res.status(200).json({ products: productsWithFullImageUrl })}
+
+        catch (err) {
+            console.error(' Server error:', err);
+            res.status(500).json({ error: 'Server error. Could not fetch products.' });
+        }
+    })

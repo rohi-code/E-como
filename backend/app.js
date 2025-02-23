@@ -3,6 +3,7 @@ const ErrorHandler = require('./middleware/error')
 const app = express()
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const path = require('path');
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -11,7 +12,9 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
-app.use("/",express.static('uploads'))
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/products', express.static(path.join(__dirname, 'products')));
 
 
 if(process.env.NODE_ENV!=="PRODUCTION"){

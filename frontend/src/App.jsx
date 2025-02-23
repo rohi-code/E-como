@@ -12,7 +12,7 @@ function App() {
     const [count, setCount] = useState(0);
 
 useEffect(()=>{
-axios.get(`${server}/getuser`,{withCredentials:true})
+axios.get(`${server}/user/getuser`,{withCredentials:true})
 .then(res=>{console.log(res.data)
     toast.success(res.data.message)
 })
@@ -22,10 +22,10 @@ axios.get(`${server}/getuser`,{withCredentials:true})
     return (
         <>
             <Routes>
-                {/* <Route path="/" element={<HomePage/>}/>
+                <Route path="/" element={<HomePage/>}/>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
-                <Route path="/activation/:Activation_Token" element={<ActivationPage />} /> */}
+                <Route path="/activation/:Activation_Token" element={<ActivationPage />} /> 
                  <Route path="/productCreate" element={<CreateProduct/>}/>
             </Routes>
  
