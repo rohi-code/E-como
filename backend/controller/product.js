@@ -21,7 +21,7 @@ const validateProductData=(data)=>{
 
 router.post('/createProduct',pupload.array('images',10),async(req,res)=>{
     const {name,description,category,tags,price,stock, email} = req.body
-    const images = req.files.map((file) => `products/${path.basename(file.path)}`);
+    const images = req.files.map((file) => `${path.basename(file.path)}`);
 
     const validationErrors = validateProductData({ name, description, category, price, stock, email });
     if (validationErrors.length > 0) {
