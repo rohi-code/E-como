@@ -86,4 +86,23 @@ router.get('/get-products', async (req, res) => {
             res.status(500).json({ error: 'Server error. Could not fetch products.' });
         }
     })
-    /*** */
+    router.get('/get-products', async (req, res) => {
+        try {
+            const products = await Product.find();
+            const productsWithFullImageUrl = products.map(product => {
+                if (product.images && product.images.length > 0) {
+                    product.images = product.images.map(imagePath => {
+                        // Image URLs are already prefixed with /products
+                        return imagePath
+    
+                    });
+                }
+                return product;
+            })
+            res.status(200).json({ products: productsWithFullImageUrl })}
+    
+            catch (err) {
+                console.error(' Server error:', err);
+                res.status(500).json({ error: 'Server error. Could not fetch products.' });
+            }
+        })
