@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Product({ name, images = [], description, price }) {
+export default function Product({ _id,name, images = [], description, price }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-
+const navigate=useNavigate()
   useEffect(() => {
     if (!images || images.length === 0) return;
     const interval = setInterval(() => {
@@ -27,7 +28,7 @@ console.log(currentImage,"8888")
       </div>
       <div className="w-full mt-4">
         <p className="text-lg font-bold my-2">${price?.toFixed(2) || "0.00"}</p>
-        <button className="w-full text-white px-4 py-2 rounded-md bg-neutral-900 hover:bg-neutral-700 transition duration-300">
+        <button onClick={()=>navigate(`/product/${_id}`)} className="w-full text-white px-4 py-2 rounded-md bg-neutral-900 hover:bg-neutral-700 transition duration-300">
           More Info
         </button>
       </div>
