@@ -20,26 +20,23 @@ const validateProductData=(data)=>{
 
 
 router.post('/createProduct',pupload.array('images',10),async(req,res)=>{
-   
-    const  {name ,description,price,stock,email,category}=req.body
-    const images = req.files.map((file) => `${path.basename(file.path)}`);// for storing image path in mongodb cause we cant store image mongodb..mongodb support json data not image
+    const {name,description,category,tags,price,stock, email} = req.body
+    const images = req.files.map((file) => `${path.basename(file.path)}`);
 
-    // const validationErrors = validateProductData({ name, description, category, price, stock, email });
-    // if (validationErrors.length > 0) {
-    //     return res.status(400).json({ errors: validationErrors });
-    // }
+    const validationErrors = validateProductData({ name, description, category, price, stock, email });
+    if (validationErrors.length > 0) {
+        return res.status(400).json({ errors: validationErrors });
+    }
 
-    // if (images.length === 0) {
-    //     return res.status(400).json({ error: 'At least one image is required' });
-    // }
+    if (images.length === 0) {
+        return res.status(400).json({ error: 'At least one image is required' });
+    }
 
     try {
         //  const user = await User.findOne({ email });
         //  if (!user) {
         //      return res.status(400).json({ error: 'Email does not exist in the users database' });
         //  }
-        if(!name ||!description ||!category||!price||!stock||!email)
-            return res.status(400).json("all required")
 
         const newProduct = new Product({
             name,
@@ -90,6 +87,8 @@ router.get('/get-products', async (req, res) => {
             res.status(500).json({ error: 'Server error. Could not fetch products.' });
         }
     })
+
+
     router.get('/my-products', async (req, res) => {
         const {email} = req.query
         try {
@@ -137,7 +136,7 @@ if(!products)
      const images = req.files.map((file) => `${path.basename(file.path)}`)
        
 
-     const updateProduct =  new Product({name ,description,price,stock,email,category,images})
+     const updateProduct = {name ,description,price,stock,email,category,images}
      await Product.findByIdAndUpdate(id,updateProduct,{new:true})
      res.status(200).json({products:updateProduct})
     }

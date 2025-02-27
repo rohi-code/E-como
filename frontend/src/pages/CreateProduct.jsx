@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import server from '../server';
 import axios from 'axios';
-
+import { useLocation } from 'react-router-dom';
 function CreateProduct() {
   const [images, setImages] = useState([]);
   const [preImage, setPreImage] = useState([]);
@@ -12,6 +12,8 @@ function CreateProduct() {
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [email, setEmail] = useState("");
+  const location=useLocation()
+
 
   const categoriesData = [
     { title: "Electronics" },
@@ -64,6 +66,49 @@ function CreateProduct() {
       alert("Failed to create product. Please check the data and try again.");
     }
   };
+
+
+const handleEdit = async(e)=>{
+  const id = location.state.id
+console.log(id)
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('description', description);
+  formData.append('category', category);
+  formData.append('tags', tags);
+  formData.append('price', price);
+  formData.append('stock', stock);
+  formData.append('email', email);
+  images.forEach((image) => {
+    formData.append("images", image);
+  });
+  
+  try {
+    const response = await axios.put(
+      `${server}/product/update-product/${id}`,
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true }
+    );
+    
+    if (response.status === 200) {
+      alert("Product updated successfully!");
+      setImages([]);
+      setName("");
+      setDescription("");
+      setCategory("");
+      setTags("");
+      setPrice("");
+      setStock("");
+      setEmail("");
+    }
+  } catch (err) {
+    console.error("Error creating product:", err);
+    alert("Failed to update product. Please check the data and try again.");
+  }
+
+}
+
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -126,6 +171,7 @@ function CreateProduct() {
         <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
           Create
         </button>
+        <button className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600" onClick={handleEdit}>Edit button</button>
       </form>
     </div>
   );

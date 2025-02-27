@@ -27,7 +27,7 @@ console.log(currentImage,"8888")
         <p className="text-sm opacity-75 mt-2">{description}</p>
       </div>
       <div className="w-full mt-4">
-        <p className="text-lg font-bold my-2">${price?.toFixed(2) || "0.00"}</p>
+        <p className="text-lg font-bold my-2">${price|| "0.00"}</p>
         <button onClick={()=>navigate(`/product/${_id}`)} className="w-full text-white px-4 py-2 rounded-md bg-neutral-900 hover:bg-neutral-700 transition duration-300">
           More Info
         </button>
