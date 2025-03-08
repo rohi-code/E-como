@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Product from '../components/product'
 import axios from 'axios';
 import server from '../server';
-
+import Nav from '../components/nav';
 function HomePage() {
 
   const [products, setProducts] = useState([]);
@@ -36,6 +36,9 @@ function HomePage() {
 
   return (
     <div>
+      <div>
+        <Nav/>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {products.map((item,index)=>(
           <Product key={index} {...item}/>
@@ -47,4 +50,3 @@ function HomePage() {
 
 export default HomePage
 
-/*** */
