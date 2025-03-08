@@ -42,3 +42,6 @@ navbar
 
 # milestone 16
 product Detail page created
+
+# milestone 17
+updated product and user schema with cart. created add to cart route and updated product detail page.
