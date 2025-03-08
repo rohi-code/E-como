@@ -6,4 +6,5 @@ import HomePage from '../pages/HomePage';
 import CreateProduct from '../pages/CreateProduct'
 import MyProduct from '../pages/myProduct'
 import ProductDetail from '../pages/ProductDetail';
-export { LoginPage,SignupPage,ActivationPage, HomePage,CreateProduct, MyProduct ,ProductDetail  }; // Named export
+import Cart from '../pages/cart';
+export { LoginPage,SignupPage,ActivationPage, HomePage,CreateProduct, MyProduct ,ProductDetail , Cart }; // Named export

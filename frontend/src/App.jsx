@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from 'react-toastify';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import { LoginPage,SignupPage,ActivationPage,HomePage,CreateProduct,MyProduct,ProductDetail } from './routes/Routes' 
+import { LoginPage,SignupPage,ActivationPage,HomePage,CreateProduct,MyProduct,ProductDetail,Cart } from './routes/Routes' 
 import { Bounce } from "react-awesome-reveal";
 import server from './server';
 import axios from 'axios';
@@ -29,6 +29,7 @@ axios.get(`${server}/user/getuser`,{withCredentials:true})
                 
                  <Route path="/productCreate" element={<CreateProduct/>}/>
                  <Route path="/my-product" element={<MyProduct/>}/>
+                 <Route path="/cart" element={<Cart/>}/>
                  <Route path="/product/:id" element={<ProductDetail/>}/>
             </Routes>
  
